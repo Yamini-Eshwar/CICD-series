@@ -2,19 +2,24 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello-1') {
+        stage('clone') {
             steps {
-                sh 'touch file-1'
+                git branch: 'main', url: 'https://github.com/Yamini-Eshwar/Day_1_Terraform_cicd.git'
             }
         }
-        stage('Hello-2') {
+        stage('init') {
             steps {
-                sh 'touch file-2'
+                sh 'terraform init'
             }
         }
-        stage('Hello-3') {
+        stage('plan') {
             steps {
-                sh 'touch file-3'
+                sh 'terraform plan'
+            }
+        }
+        stage('apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
             }
         }
     }
