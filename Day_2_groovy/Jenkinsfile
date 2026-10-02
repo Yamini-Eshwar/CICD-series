@@ -1,0 +1,20 @@
+node {
+    properties([
+        parameters([
+            choice(name: 'BRANCH_NAME', choices: ['main', 'feature'])
+        ])
+    ])
+    stage('Decide') { 
+        if (env.BRANCH_NAME == 'main'){
+            stage('Deploy to Prod'){
+                echo 'Deploying to Prod'
+            }
+        }
+        else if (env.BRANCH_NAME.startsWith('feature')) {
+            stage ('Deploy to Dev') {
+                echo 'Deploying to Dev'
+            }
+        }
+    }
+    
+}
