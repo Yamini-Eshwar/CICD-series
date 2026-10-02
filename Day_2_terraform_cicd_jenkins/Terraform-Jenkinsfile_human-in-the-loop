@@ -1,0 +1,48 @@
+pipeline{
+    agent any
+    
+    parameters{
+        choice(name: 'action', choices: ['apply', 'destroy'])
+    }
+    
+    stages{
+        stage('git checkout'){
+               steps {
+                    git branch: 'main', url: 'https://github.com/Yamini-Eshwar/CICD-series.git'
+            }
+        }
+
+        stage('init'){
+                steps{
+                    dir('Day_2_terraform_cicd_jenkins') {
+                        sh 'terraform init'
+
+                    }                   
+                }
+            }
+
+        stage('plan'){
+                steps{
+                    dir('Day_2_terraform_cicd_jenkins') {
+                        sh 'terraform plan'
+                    }
+                }
+            }
+
+        stage('approve plan'){
+                steps{
+                    input message: 'Do you want to apply the changes?', ok:'Yes apply changes'
+                }
+            }
+
+        stage('apply'){
+                steps{
+                    dir('Day_2_terraform_cicd_jenkins') {
+                        sh "terraform ${params.action} -auto-approve"
+                    }
+                }
+            }
+
+        }
+    
+}
